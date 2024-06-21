@@ -20,4 +20,4 @@ jobs:
         DEPLOY_TOKEN: ${{ secrets.API_TOKEN_SESTAT }}
       run: |
         echo -e "[pypi]\nusername = __token__\npassword = $DEPLOY_TOKEN" >> ".pypirc"
-        python -m twine upload --config-file ./pypirc dist/*
+        python -m twine upload --config-file ./.pypirc dist/*
