@@ -195,3 +195,6 @@ class SecondaryStructure:
         if type(self) is type(other):
             return self.root == other.root
         return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
