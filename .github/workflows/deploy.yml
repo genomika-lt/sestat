@@ -1,0 +1,23 @@
+name: Deploy to PyPi
+
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install build twine
+    - name: Build package
+      run: |
+        python -m build
+    - name: Upload package
+      env:
+        DEPLOY_TOKEN: ${{ secrets.API_TOKEN_SESTAT }}
+      run: |
+        cat -e "[pypi]\nusername = __token__\npassword = $" >> .pypirc
+        python -m twine upload --config-file ./pypirc dist/*
