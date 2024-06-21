@@ -1,6 +1,6 @@
 import unittest
 
-from sestat import Structure, Rail, Circle, SecondaryStructure
+from src.sestat import Structure, Rail, Circle, SecondaryStructure
 
 
 class TestSecondaryStructure(unittest.TestCase):
