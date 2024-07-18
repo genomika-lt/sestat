@@ -223,8 +223,7 @@ class TestSecondaryStructure(unittest.TestCase):
     def test_load_exceptions(self):
         secondary_structure = SecondaryStructure()
 
-        reference =\
-            'AGT'
+        reference = 'AGT'
         structure = '....'
         self.assertRaises(ValueError, secondary_structure.load_from_dot_parens, reference,
                           structure)
@@ -250,6 +249,13 @@ class TestSecondaryStructure(unittest.TestCase):
     def test_eq(self):
         self.assertEqual(SecondaryStructure(), SecondaryStructure())
         self.assertNotEqual(SecondaryStructure(), 1)
+
+    def test_empty(self):
+        secondary_structure = SecondaryStructure()
+        self.assertTrue(secondary_structure.is_empty())
+
+        secondary_structure.load_from_dot_parens('AGT', '...')
+        self.assertFalse(secondary_structure.is_empty())
 
 
 class TestStructure(unittest.TestCase):
