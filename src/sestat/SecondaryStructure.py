@@ -1,46 +1,14 @@
 import logging
 
-from enum import Enum
-from itertools import zip_longest
-
-
-class Structure:
-    def __init__(self):
-        self.parent: Structure | None = None
-        self.elements: list[Structure | str] = []
-
-    def __eq__(self, other):
-        if type(other) is type(self) and type(other.parent) is type(self.parent):
-            return all(
-                [i == j for i, j in zip_longest(self.elements, other.elements, fillvalue=None)])
-        return False
-
-
-class Circle(Structure):
-    def __init__(self):
-        Structure.__init__(self)
-        self.parent: Rail | None = None
-        self.elements: list[Rail | str] = []
-
-
-class RailState(Enum):
-    ADDING = 1
-    FINISHING = 2
-
-
-class Rail(Structure):
-    def __init__(self, state: RailState = RailState.ADDING):
-        Structure.__init__(self)
-        self.parent: Circle | None = None
-        self.elements: list[Circle | str] = []
-
-        self.state: RailState = state
-        self.can_contain = 0
+from .Structure import Structure, Circle, Rail, RailState
 
 
 class SecondaryStructure:
     def __init__(self):
         self.root: Circle | None = None
+
+    def is_empty(self):
+        return self.root is None
 
     def load_from_dot_parens(self, reference: str, structure: str) -> None:
         """Loads structure and makes available for processing"""
@@ -54,12 +22,11 @@ class SecondaryStructure:
 
         for symbol in structure:
             if symbol not in '.()+':
-                raise ValueError('Unsupported symbol in structure')
+                raise ValueError(f'Unsupported symbol in structure "{symbol}"')
 
-        self.root = Circle()
-        current = self.root
-
+        current = self.root = Circle()
         reference_counter = 0
+
         for symbol in structure:
             if isinstance(current, Circle):
                 if symbol == '.':
@@ -195,3 +162,6 @@ class SecondaryStructure:
         if type(self) is type(other):
             return self.root == other.root
         return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
